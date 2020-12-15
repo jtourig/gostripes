@@ -1,58 +1,88 @@
 bootstrap: docker
 From: continuumio/miniconda3
 
+
+%help
+	gostripes v0.3.1
+	Processing and quality control of STRIPE-seq FASTQ files
+	see https://github.com/rpolicastro/gostripes for usage details
+
+
 %post
+	## Install C Compiler
+	## ----------
 
-## Install C Compiler
-## ----------
+	apt -y update
+	apt -y install build-essential
 
-apt -y update
-apt -y install build-essential
+	## Install conda environment.
+	## ----------
 
-## Install conda environment.
-## ----------
+	# Allow conda commands.
+	. /opt/conda/etc/profile.d/conda.sh
 
-# Allow conda commands.
-. /opt/conda/etc/profile.d/conda.sh
+	# Update conda.
+	conda update -n base -y -c defaults conda
 
-# Update conda.
-conda update -n base -y -c defaults conda
+	# Install software available via conda environment.
+	conda create -n gostripes -y -c conda-forge -c bioconda \
+	star samtools fastqc picard umi_tools \
+	r-tidyverse r-devtools \
+	bioconductor-biostrings bioconductor-rsubread \
+	bioconductor-genomicalignments bioconductor-shortread \
+	bioconductor-genomicranges bioconductor-rtracklayer
 
-# Install software available via conda environment.
-conda create -n gostripes -y -c conda-forge -c bioconda \
-star samtools fastqc picard umi_tools \
-r-tidyverse r-devtools \
-bioconductor-biostrings bioconductor-rsubread \
-bioconductor-genomicalignments bioconductor-shortread \
-bioconductor-genomicranges bioconductor-rtracklayer
+	# Update conda environment.
+	conda update -n gostripes -y -c conda-forge -c bioconda --all
 
-# Update conda environment.
-conda update -n gostripes -y -c conda-forge -c bioconda --all
+	# Clean installation files for conda.
+	conda clean -y --all
 
-# Clean installation files for conda.
-conda clean -y --all
+	## Install TagDust2.
+	## ----------
 
-## Install TagDust2.
-## ----------
+	cd /opt
 
-cd /opt
+	wget --content-disposition https://sourceforge.net/projects/tagdust/files/tagdust-2.33.tar.gz/download
+	tar -xzf tagdust-2.33.tar.gz
+	cd tagdust-2.33/
 
-wget --content-disposition https://sourceforge.net/projects/tagdust/files/tagdust-2.33.tar.gz/download
-tar -xzf tagdust-2.33.tar.gz
-cd tagdust-2.33/
+	./configure
+	make
+	make install
 
-./configure
-make
-make install
+	## Install gostripes
+	## ----------
 
-## Install gostripes
-## ----------
+	# Add R to path for installation.
+	export PATH=$PATH:/opt/conda/envs/gostripes/bin/
 
-# Add R to path for installation.
-export PATH=$PATH:/opt/conda/envs/gostripes/bin/
+	# Install gostripes from github.
+	#R --slave -e 'Sys.setenv(TAR="/bin/tar");devtools::install_github("rpolicastro/gostripes",ref="dev")'
 
-# Install gostripes from github.
-R --slave -e 'Sys.setenv(TAR="/bin/tar");devtools::install_github("rpolicastro/gostripes",ref="dev")'
+	# temporarily build from JT's fork:
+	R --slave -e 'Sys.setenv(TAR="/bin/tar");devtools::install_github("jtourig/gostripes",ref="master")'
+
+
 
 %environment
-export PATH=/opt/conda/envs/gostripes/bin/:$PATH
+	export PATH=/opt/conda/envs/gostripes/lib/R/library/gostripes/inst/scripts:/opt/conda/envs/gostripes/bin/:$PATH
+
+
+%runscript
+	# trying `gostripes.R $@' (should be in path above) here, so the container can be run as:
+	# singularity run gostripes_0.3.0.sif [gostripes.R --options]
+	echo "$NOW  Running gostripes with options:" >&2
+	echo "$*" >&2
+	exec gostripes.R "$@"
+
+
+%test
+	# consider adding tests for the build or gostripes on example data here
+
+
+%labels
+	version	0.3.1
+	Author Bob Policastro @rpolicastro
+	Contributor	Jay Tourigny @jtourig
+
