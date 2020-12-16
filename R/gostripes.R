@@ -38,7 +38,12 @@ setClass(
 #' @importFrom magrittr %>%
 #'
 #' @param sample_sheet Sample sheet data.frame containing 'sample_name', 'replicate_ID", 'R1_read', and 'R2_read'
-#' @param cores Number of CPU cores/threads available
+#' @param cores Number of CPU cores/threads available to use
+#' @param assembly Path to genome assembly
+#' @param annotation Path to genome annotation
+#' @param rRNA Path to rRNA.fasta to filter with
+#' @param index Path to STAR index
+#' @param output_dir  Base path to save output to
 #'
 #' @return gostripes object containing the sample sheet and available cores
 #'
@@ -57,7 +62,7 @@ setClass(
 #'
 #' @export
 
-gostripes <- function(sample_sheet, cores = 1) {
+gostripes <- function(sample_sheet, cores, assembly, annotation, rRNA, output_dir, index) {
 
 	## Check for proper inputs to gostripes function.
 
@@ -71,6 +76,8 @@ gostripes <- function(sample_sheet, cores = 1) {
 	# Check other arguments.
 	if (!is(cores, "numeric")) stop("Cores must be a positive integer")
 	if (!cores %% 1 == 0 | cores < 1) stop("Cores must be a positive integer")
+    #NOTE further parameter checking currently takes place in downstream methods;
+    #     consider moving it here
 
 	## Check whether each sample is paired on unpaired.
 	sample_sheet <- sample_sheet %>%
@@ -81,18 +88,27 @@ gostripes <- function(sample_sheet, cores = 1) {
 
 	## Print out some information on the sample sheet.
 	message(
-		"\n## gostripesR v0.2.0\n##\n",
+		"\n## gostripesR v0.3.1\n##\n",
 		"## Sample sheet contains ", nrow(sample_sheet), " sample(s)\n",
 		sprintf("## - %s\n", pull(sample_sheet, "sample_name")),
 		"##\n",
-		"## Available cores set to ", cores
+		"## Available cores set to ", cores,
+		"## Assembly = ", assembly,
+		"## Annotation = ", annotation,
+		"## rRNA = ", rRNA,
+		"## index= ", index,
+		"## output_dir = ", output_dir,
+		"\n"
 	)
 
 	## Create gostripes object.
 	go_obj <- new(
 		"gostripes",
 		sample_sheet = sample_sheet,
-		settings = list("cores" = cores)
+		settings = list("cores" = cores, "rRNA" = rRNA, "assembly" = assembly, 
+		                "annotation" = annotation, "output_dir" = output_dir,
+		                "index" = index
+		)
 	)
 
 	return(go_obj)
