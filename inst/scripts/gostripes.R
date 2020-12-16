@@ -6,6 +6,7 @@
 library("gostripes")
 library("magrittr")
 
+### FUNCTIONS ###
 print_usage <- function() {
     cat("
         usage:  gostripes.R [options] 
@@ -35,8 +36,7 @@ print_usage <- function() {
 
 # parse args without added dependencies
 parse_args <- function(args){
-    # init options and set defaults
-    opts <- list(cpus = 2, output_dir = './')
+    opts <- list(cpus = 2, output_dir = './') # init options and set defaults
     i <- 1
     while(i <= length(args)) {
         print(args[[i]])
@@ -81,16 +81,12 @@ parse_args <- function(args){
     return(opts)
 }
 
-# fetch command line arguments
-print(args)
+
+### MAIN ###
+# fetch and parse command line arguments, give user help
 args <- commandArgs(trailingOnly = TRUE)
-
-# give user help
 if (length(args) == 0 || '-h' %in% args || '--help' %in% args) print_usage()
-
-# parse and store arguments
 opts <- parse_args(args)
-print(opts)
 
 # check the genome + assembly OR index settings, and initialize gostripes object
 if(!is.null(opts$assembly) && !is.null(opts$annotation)){
@@ -99,12 +95,19 @@ if(!is.null(opts$assembly) && !is.null(opts$annotation)){
         print('oops, a STAR index is also set')
         stop("You must specify a genome assembly + annotation, OR just a STAR index", '\nExiting...')
     }
-    #TODO init gostripes object here with genome and assembly
+    #init gostripes object with genome and assembly
+    go_object <- gostripes(sample_sheet = opts$sample_sheet, cores = opts$cores,
+                           assembly = opts$assembly, annotation = opts$annotation,
+                           rRNA = opts$rRNA, output_dir = opts$output_dir
+    )
 } else if(is.null(opts$assembly) && is.null(opts$annotation)) {
     print('no assembly or annotation assigned, using STAR index')
     if(!is.null(opts$STAR_index)) {
         print('index is assigned')
-        #TODO init gostripes object here with STAR index
+        #init gostripes object with STAR index
+        go_object <- gostripes(sample_sheet = opts$sample_sheet, cores = opts$cores,
+                               index = opts$index, rRNA = opts$rRNA, output_dir = opts$output_dir
+        )
     } else stop('no assembly, annotation or index set! see gostripes.R --help for usage')
 } else {
     message('missing an assembly or annotation - both are required!')
@@ -113,4 +116,17 @@ if(!is.null(opts$assembly) && !is.null(opts$annotation)){
 }
 
 
-## run workflow given options
+# run workflow given options
+
+go_object <- gostripes(sample_sheet) %>%
+    process_reads("./scratch/cleaned_fastq", rRNA, cores = 4) %>%
+    fastq_quality("./scratch/fastqc_reports", cores = 4) %>%
+    genome_index(assembly, annotation, "./scratch/genome_index", cores = 4) %>%
+    align_reads("./scratch/aligned", cores = 4) %>%
+    process_bams("./scratch/cleaned_bams", cores = 4) %>%
+    count_features(annotation, cores = 4) %>%
+    export_counts("./scratch/counts") %>%
+    call_TSSs %>%
+    export_TSSs("./scratch/TSSs") %>%
+    call_TSRs(3, 25) %>%
+    export_TSRs("./scratch/TSRs")
