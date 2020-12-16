@@ -1,0 +1,2 @@
+sample_name	replicate_ID	R1_read	R2_read
+stripeseq_test	0	/opt/conda/envs/gostripes/lib/R/library/gostripes/extdata/S288C_R1.fastq	/opt/conda/envs/gostripes/lib/R/library/gostripes/extdata/S288C_R2.fastq
