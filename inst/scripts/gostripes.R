@@ -3,7 +3,8 @@
 # gostripes by Bob Policastro @rpolicastro
 # this script by @jtourig / zentlab 2020
 
-library()
+library("gostripes")
+library("magrittr")
 
 print_usage <- function() {
     cat("
