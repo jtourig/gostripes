@@ -1,6 +1,9 @@
 #!/usr/bin/env Rscript
-# a generic gostripesR entry script
-# jtourig / zentlab 2020
+# a generic gostripesR entry/wrapper script
+# gostripes by Bob Policastro @rpolicastro
+# this script by @jtourig / zentlab 2020
+
+library()
 
 print_usage <- function() {
     cat("
@@ -15,11 +18,9 @@ print_usage <- function() {
                             use a pre-built index instead of building from scratch
         --rRNA              fasta file defining your contaminants to filter (required)
         --cpus              integer number of cpu cores/threads to use      (optional, defaults to 2)
-                            or, name of environment variable defining value (coming soon)
-                            (must set via SINGULARITYENV_[ENV_VAR_NAME]=[value or ${YOUR_VAR_NAME}] singularity exec ... )
+                            or, name of environment variable defining value
+                            (must set via SINGULARITYENV_[ENV_VAR_NAME]=[value or ${YOUR_VAR_NAME}] singularity [cmd] ... )
         --output-dir       path/to/output/directory                         (optional, defaults to ./)
-        
-        NOTE: Short options other than '-h' are not currently supported
         
         Example (from inside gostripes singularity container):
         gostripes.R --sample_sheet ./sample_sheet.tsv --assembly /opt/genome/hg38.fa.masked  \
