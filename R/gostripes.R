@@ -62,7 +62,10 @@ setClass(
 #'
 #' @export
 
-gostripes <- function(sample_sheet, cores, assembly, annotation, rRNA, output_dir, index) {
+gostripes <- function(sample_sheet, cores = 2,
+                      assembly = NA, annotation = NA, index = NA, 
+                      rRNA, output_dir = './'
+                      ) {
 
 	## Check for proper inputs to gostripes function.
 
@@ -92,12 +95,12 @@ gostripes <- function(sample_sheet, cores, assembly, annotation, rRNA, output_di
 		"## Sample sheet contains ", nrow(sample_sheet), " sample(s)\n",
 		sprintf("## - %s\n", pull(sample_sheet, "sample_name")),
 		"##\n",
-		"## Available cores set to ", cores,
-		"## Assembly = ", assembly,
-		"## Annotation = ", annotation,
-		"## rRNA = ", rRNA,
-		"## index= ", index,
-		"## output_dir = ", output_dir,
+		"## Available cores set to ", cores, "\n",
+		"## Assembly = ", assembly, "\n",
+		"## Index = ", index, "\n",
+		"## Annotation = ", annotation, "\n",
+		"## rRNA = ", rRNA, "\n",
+		"## output_dir = ", output_dir, "\n",
 		"\n"
 	)
 
