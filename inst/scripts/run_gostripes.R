@@ -98,7 +98,7 @@ if(!is.null(opts$assembly) && !is.null(opts$annotation)){
     }
     #init gostripes object with genome and assembly
     go_object <- gostripes(sample_sheet = read.csv(opts$sample_sheet, header = TRUE, sep = '\t'),
-                           cores = opts$cores, rRNA = opts$rRNA,
+                           cores = as.numeric(opts$cores), rRNA = opts$rRNA,
                            assembly = opts$assembly, annotation = opts$annotation,
                            output_dir = opts$output_dir
     )
@@ -108,7 +108,7 @@ if(!is.null(opts$assembly) && !is.null(opts$annotation)){
         print('index is assigned')
         #init gostripes object with STAR index
         go_object <- gostripes(sample_sheet = read.csv(opts$sample_sheet, header = TRUE, sep = '\t'),
-                               cores = opts$cores, rRNA = opts$rRNA,
+                               cores = as.numeric(opts$cores), rRNA = opts$rRNA,
                                index = opts$index, output_dir = opts$output_dir
         )
     } else stop('no assembly, annotation or index set! see gostripes.R --help for usage')
