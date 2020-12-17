@@ -13,6 +13,10 @@ yeast_rRNA='/opt/conda/envs/gostripes/lib/R/library/gostripes/extdata/Sc_rRNA.fa
 num_procs=4
 output_dir='./gostripes-example-output/'
 
+
+# use the WIP scripts:
+export PATH=$HOME/gostripes/inst/scripts/:$PATH
+
 ### CMD ###
 run_gostripes.R \
 	 --sample-sheet "$samples" --cpus "$num_procs" \
