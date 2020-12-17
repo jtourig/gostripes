@@ -88,10 +88,6 @@ args <- commandArgs(trailingOnly = TRUE)
 if (length(args) == 0 || '-h' %in% args || '--help' %in% args) print_usage()
 opts <- parse_args(args)
 
-print(opts)
-q()
-
-
 # check the genome + assembly OR index settings, and initialize gostripes object
 if(!is.null(opts$assembly) && !is.null(opts$annotation)){
     print('assembly and annotation are set')
