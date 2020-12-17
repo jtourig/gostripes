@@ -3,7 +3,6 @@
 # gostripes by Bob Policastro @rpolicastro
 # this script by @jtourig / zentlab 2020
 
-install.packages('./gostripes/', repos=NULL, type="source") # temp WIP fork
 library("gostripes")
 library("magrittr")
 
@@ -89,6 +88,10 @@ args <- commandArgs(trailingOnly = TRUE)
 if (length(args) == 0 || '-h' %in% args || '--help' %in% args) print_usage()
 opts <- parse_args(args)
 
+print(opts)
+q()
+
+
 # check the genome + assembly OR index settings, and initialize gostripes object
 if(!is.null(opts$assembly) && !is.null(opts$annotation)){
     print('assembly and annotation are set')
@@ -98,7 +101,7 @@ if(!is.null(opts$assembly) && !is.null(opts$annotation)){
     }
     #init gostripes object with genome and assembly
     go_object <- gostripes(sample_sheet = read.csv(opts$sample_sheet, header = TRUE, sep = '\t'),
-                           cores = as.numeric(opts$cores), rRNA = opts$rRNA,
+                           cores = opts$cpus, rRNA = opts$rRNA,
                            assembly = opts$assembly, annotation = opts$annotation,
                            output_dir = opts$output_dir
     )
@@ -108,7 +111,7 @@ if(!is.null(opts$assembly) && !is.null(opts$annotation)){
         print('index is assigned')
         #init gostripes object with STAR index
         go_object <- gostripes(sample_sheet = read.csv(opts$sample_sheet, header = TRUE, sep = '\t'),
-                               cores = as.numeric(opts$cores), rRNA = opts$rRNA,
+                               cores = opts$cpus, rRNA = opts$rRNA,
                                index = opts$index, output_dir = opts$output_dir
         )
     } else stop('no assembly, annotation or index set! see gostripes.R --help for usage')
