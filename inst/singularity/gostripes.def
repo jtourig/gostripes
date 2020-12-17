@@ -58,10 +58,11 @@ From: continuumio/miniconda3
 	export PATH=$PATH:/opt/conda/envs/gostripes/bin/
 
 	# Install gostripes from github.
-	R --slave -e 'Sys.setenv(TAR="/bin/tar");devtools::install_github("rpolicastro/gostripes",ref="dev")'
+	#R --slave -e 'Sys.setenv(TAR="/bin/tar");devtools::install_github("rpolicastro/gostripes",ref="dev")'
 
-	# or, build from JT's fork:
-	#R --slave -e 'Sys.setenv(TAR="/bin/tar");devtools::install_github("jtourig/gostripes",ref="master")'
+	# temporarily build from JT's fork:
+	R --slave -e 'Sys.setenv(TAR="/bin/tar");devtools::install_github("jtourig/gostripes",ref="master")'
+
 
 
 %environment
@@ -81,7 +82,7 @@ From: continuumio/miniconda3
 
 
 %labels
-	Version	0.3.1
+	version	0.3.1
 	Author Bob Policastro @rpolicastro
 	Contributor	Jay Tourigny @jtourig
 
