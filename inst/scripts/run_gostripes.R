@@ -3,6 +3,7 @@
 # gostripes by Bob Policastro @rpolicastro
 # this script by @jtourig / zentlab 2020
 
+install.packages('./gostripes/', repos=NULL, type="source") # temp WIP fork
 library("gostripes")
 library("magrittr")
 
@@ -96,17 +97,19 @@ if(!is.null(opts$assembly) && !is.null(opts$annotation)){
         stop("You must specify a genome assembly + annotation, OR just a STAR index", '\nExiting...')
     }
     #init gostripes object with genome and assembly
-    go_object <- gostripes(sample_sheet = opts$sample_sheet, cores = opts$cores,
+    go_object <- gostripes(sample_sheet = read.csv(opts$sample_sheet, header = TRUE, sep = '\t'),
+                           cores = opts$cores, rRNA = opts$rRNA,
                            assembly = opts$assembly, annotation = opts$annotation,
-                           rRNA = opts$rRNA, output_dir = opts$output_dir
+                           output_dir = opts$output_dir
     )
 } else if(is.null(opts$assembly) && is.null(opts$annotation)) {
     print('no assembly or annotation assigned, using STAR index')
     if(!is.null(opts$STAR_index)) {
         print('index is assigned')
         #init gostripes object with STAR index
-        go_object <- gostripes(sample_sheet = opts$sample_sheet, cores = opts$cores,
-                               index = opts$index, rRNA = opts$rRNA, output_dir = opts$output_dir
+        go_object <- gostripes(sample_sheet = read.csv(opts$sample_sheet, header = TRUE, sep = '\t'),
+                               cores = opts$cores, rRNA = opts$rRNA,
+                               index = opts$index, output_dir = opts$output_dir
         )
     } else stop('no assembly, annotation or index set! see gostripes.R --help for usage')
 } else {
@@ -118,15 +121,17 @@ if(!is.null(opts$assembly) && !is.null(opts$annotation)){
 
 # run workflow given options
 
-go_object <- gostripes(sample_sheet) %>%
-    process_reads("./scratch/cleaned_fastq", rRNA, cores = 4) %>%
-    fastq_quality("./scratch/fastqc_reports", cores = 4) %>%
-    genome_index(assembly, annotation, "./scratch/genome_index", cores = 4) %>%
-    align_reads("./scratch/aligned", cores = 4) %>%
-    process_bams("./scratch/cleaned_bams", cores = 4) %>%
-    count_features(annotation, cores = 4) %>%
-    export_counts("./scratch/counts") %>%
-    call_TSSs %>%
-    export_TSSs("./scratch/TSSs") %>%
-    call_TSRs(3, 25) %>%
-    export_TSRs("./scratch/TSRs")
+print(go_object)
+
+# go_object <- gostripes(sample_sheet) %>%
+#     process_reads("./scratch/cleaned_fastq", rRNA, cores = 4) %>%
+#     fastq_quality("./scratch/fastqc_reports", cores = 4) %>%
+#     genome_index(assembly, annotation, "./scratch/genome_index", cores = 4) %>%
+#     align_reads("./scratch/aligned", cores = 4) %>%
+#     process_bams("./scratch/cleaned_bams", cores = 4) %>%
+#     count_features(annotation, cores = 4) %>%
+#     export_counts("./scratch/counts") %>%
+#     call_TSSs %>%
+#     export_TSSs("./scratch/TSSs") %>%
+#     call_TSRs(3, 25) %>%
+#     export_TSRs("./scratch/TSRs")
