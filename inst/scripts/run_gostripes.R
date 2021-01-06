@@ -138,14 +138,14 @@ go_object <- go_object %>%
     process_reads(paste(opts$output_dir, "/cleaned-fastqs/", sep=''), opts$rRNA, cores = opts$cpus) %>%
     fastq_quality(paste(opts$output_dir, "/fastqc-reports/", sep=''), cores = opts$cpus) %>%
     genome_index(opts$assembly, opts$annotation, paste(opts$output_dir, "/genome-index/", sep=''), cores = opts$cpu) %>%
-    align_reads(paste(opts$output_dir, "/aligned-bams/", sep=''), cores = opts$cpus)
+    align_reads(paste(opts$output_dir, "/aligned-bams/", sep=''), cores = opts$cpus) %>%
+    process_bams(paste(opts$output_dir, "/cleaned-bams/", sep=''), cores = opts$cpus)
 
 print(go_object)
 
 message("\n  gostripes complete!!\n\n")
 
 ## steps which Bob says are redundant with TSRexploreR and better featured/maintained there
-#     process_bams("./scratch/cleaned_bams", cores = 4) %>%
 #     count_features(annotation, cores = 4) %>%
 #     export_counts("./scratch/counts") %>%
 #     call_TSSs %>%
