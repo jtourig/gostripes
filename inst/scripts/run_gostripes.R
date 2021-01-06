@@ -9,7 +9,7 @@ library("magrittr")
 ### FUNCTIONS ###
 print_usage <- function() {
     cat("
-        usage:  gostripes.R [options] 
+        usage:  run_gostripes.R [options] 
         
         options:
         -h | --help         (prints this message)
@@ -20,15 +20,27 @@ print_usage <- function() {
                             use a pre-built index instead of building from scratch
         --rRNA              fasta file defining your contaminants to filter (required)
         --cpus              integer number of cpu cores/threads to use      (optional, defaults to 2)
-                            or, name of environment variable defining value
-                            (must set via SINGULARITYENV_[ENV_VAR_NAME]=[value or ${YOUR_VAR_NAME}] singularity [cmd] ... )
+                            or, environment variable defining value
+                            (can also set via SINGULARITYENV_[ENV_VAR_NAME]=[value or ${YOUR_VAR_NAME}] singularity [cmd] ... )
         --output-dir       path/to/output/directory                         (optional, defaults to ./)
         
-        Example (from inside gostripes singularity container):
-        gostripes.R --sample_sheet ./sample_sheet.tsv --assembly /opt/genome/hg38.fa.masked  \
-            --annotation /opt/genome/hg38.ncbiRefSeq.gtf --rRNA /opt/genome/Hs_rRNA.fa \
-            --cpus 4 --output_dir ./gostripes_output/
+
+        Examples:
+
+          Running the container as a command:
+          singularity run -ecB your/genome/dir:/opt/genome/ -H \"$PWD\" gostripes.sif \
+            --sample_sheet ./your_sample_sheet.tsv --rRNA /opt/genome/Hs_rRNA.fa \
+            --STAR-index /opt/genome/your-STAR-index-dir/ --cpus 4 \
+            --output-dir ./gostripes-output/
         
+          From inside gostripes singularity container:
+          run_gostripes.R --sample_sheet ./your_sample_sheet.tsv --assembly /opt/genome/hg38.fa.masked  \
+            --annotation /opt/genome/hg38.ncbiRefSeq.gtf --rRNA /opt/genome/Hs_rRNA.fa \
+            --cpus 4 --output-dir ./gostripes-output/
+
+    
+        NOTE that currently, if you provide --assembly and --annotation, the STAR index build uses default options
+          If you need to customize your index build, do that first and provide it via --STAR-index
     "
     )
     q()
