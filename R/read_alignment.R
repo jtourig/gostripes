@@ -42,7 +42,7 @@
 genome_index <- function(go_obj, genome_assembly, genome_annotation, outdir, cores = 1) {
   message('Inside genome_index()')
   ## Skip if the genome index is already specified in the go_obj, making sure it exists
-  if(!is.null(go_obj@settings$index)) {
+  if(!is.na(go_obj@settings$index)) {
     message("    go_obj specifies STAR index")
     if(dir.exists(go_obj@settings$index)) {
       message("    STAR index directory found\n    skipping index build...")
