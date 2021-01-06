@@ -40,8 +40,8 @@
 #' @export
 
 genome_index <- function(go_obj, genome_assembly, genome_annotation, outdir, cores = 1) {
-
-  ## Skip if the genome index is already specified in the go_obj, make sure it exists
+  message('Inside genome_index()')
+  ## Skip if the genome index is already specified in the go_obj, making sure it exists
   if(!is.null(go_obj@settings$index)) {
     message("    go_obj specifies STAR index")
     if(dir.exists(go_obj@settings$index)) {
@@ -52,6 +52,10 @@ genome_index <- function(go_obj, genome_assembly, genome_annotation, outdir, cor
                 go_obj@settings$index
            )
   }
+  print(go_obj@settings$index)
+  print(go_obj@settings$nada)
+  print(is.null(go_obj@settings$nada))
+  stop('somehow got past the index check')
   
 	## Check validity of inputs.
 	if (!is(go_obj, "gostripes")) stop("go_obj must be a gostripes object")
