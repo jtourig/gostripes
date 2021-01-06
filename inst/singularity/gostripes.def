@@ -74,7 +74,7 @@ From: continuumio/miniconda3
 	# singularity run gostripes_0.3.0.sif [gostripes.R --options]
 	echo "$NOW  Running gostripes with options:" >&2
 	echo "$*" >&2
-	exec gostripes.R "$@"
+	exec run_gostripes.R "$@"
 
 
 %test
