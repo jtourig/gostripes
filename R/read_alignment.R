@@ -40,22 +40,18 @@
 #' @export
 
 genome_index <- function(go_obj, genome_assembly, genome_annotation, outdir, cores = 1) {
-  message('Inside genome_index()')
+  
   ## Skip if the genome index is already specified in the go_obj, making sure it exists
   if(!is.na(go_obj@settings$index)) {
-    message("    go_obj specifies STAR index")
+    message("\n## Genome Indexing\n\n..go_obj specifies STAR index")
     if(dir.exists(go_obj@settings$index)) {
-      message("    STAR index directory found\n    skipping index build...")
+      message("......STAR index directory found\n......skipping index build...")
       return(go_obj)
-    } else stop("    STAR index specified in go_obj not found\n",
-                "    check your index option path:\n    ",
+    } else stop("......STAR index specified in go_obj not found\n",
+                "......check your index option path:\n    ",
                 go_obj@settings$index
            )
   }
-  print(go_obj@settings$index)
-  print(go_obj@settings$nada)
-  print(is.null(go_obj@settings$nada))
-  stop('somehow got past the index check')
   
 	## Check validity of inputs.
 	if (!is(go_obj, "gostripes")) stop("go_obj must be a gostripes object")
