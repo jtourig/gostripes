@@ -67,7 +67,7 @@ parse_args <- function(args){
                 i <- i + 2
             },
             '--STAR-index' = {
-                opts$STAR_index <- args[[i+1]]
+                opts$star_index <- args[[i+1]]
                 i <- i + 2
             },
             '--rRNA' = {
@@ -103,7 +103,7 @@ opts <- parse_args(args)
 # check the genome + assembly OR index settings, and initialize gostripes object
 if(!is.null(opts$assembly) && !is.null(opts$annotation)){
     print('assembly and annotation are set')
-    if(!is.null(opts$STAR_index)) {
+    if(!is.null(opts$star_index)) {
         print('oops, a STAR index is also set')
         stop("You must specify a genome assembly + annotation, OR just a STAR index", '\nExiting...')
     }
@@ -115,17 +115,17 @@ if(!is.null(opts$assembly) && !is.null(opts$annotation)){
     )
 } else if(is.null(opts$assembly) && is.null(opts$annotation)) {
     print('no assembly or annotation assigned, using STAR index')
-    if(!is.null(opts$STAR_index)) {
+    if(!is.null(opts$star_index)) {
         print('index is assigned')
         #init gostripes object with STAR index
         go_object <- gostripes(sample_sheet = read.csv(opts$sample_sheet, header = TRUE, sep = '\t'),
                                cores = opts$cpus, rRNA = opts$rRNA,
-                               index = opts$index, output_dir = opts$output_dir
+                               star_index = opts$star_index, output_dir = opts$output_dir
         )
     } else stop('no assembly, annotation or index set! see gostripes.R --help for usage')
 } else {
     message('missing an assembly or annotation - both are required!')
-    if(!is.null(opts$STAR_index)) message('oops, a STAR index is also set')
+    if(!is.null(opts$star_index)) message('oops, a STAR index is also set')
     stop("You must specify a genome assembly + annotation, OR just a STAR index", '\nExiting...')
 }
 

@@ -42,14 +42,14 @@
 genome_index <- function(go_obj, genome_assembly, genome_annotation, outdir, cores = 1) {
   
   ## Skip if the genome index is already specified in the go_obj, making sure it exists
-  if(!is.na(go_obj@settings$index)) {
+  if(!is.na(go_obj@settings$star_index)) {
     message("\n## Genome Indexing\n\n..go_obj specifies STAR index")
-    if(dir.exists(go_obj@settings$index)) {
+    if(dir.exists(go_obj@settings$star_index)) {
       message("......STAR index directory found\n......skipping index build...")
       return(go_obj)
     } else stop("......STAR index specified in go_obj not found\n",
                 "......check your index option path:\n    ",
-                go_obj@settings$index
+                go_obj@settings$star_index
            )
   }
   
@@ -181,7 +181,10 @@ align_reads <- function(go_obj, outdir, cores = 1) {
 			"--outFileNamePrefix", file.path(outdir, paste0(args$sample_name, "_"))
 		)
 		message("......Aligning reads")
-		system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
+		ret_val <- system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
+		message("orig STAR return value = ", ret_val)
+		system(command)
+		stop("Quitting after STAR alignment attempt")
 
 		# Index the aligned bams.
 		message("......Indexing coordinate sorted BAMs")

@@ -42,7 +42,7 @@ setClass(
 #' @param assembly Path to genome assembly
 #' @param annotation Path to genome annotation
 #' @param rRNA Path to rRNA.fasta to filter with
-#' @param index Path to STAR index
+#' @param star_index Path to STAR index
 #' @param output_dir  Base path to save output to
 #'
 #' @return gostripes object containing the sample sheet and available cores
@@ -62,10 +62,9 @@ setClass(
 #'
 #' @export
 
-gostripes <- function(sample_sheet, cores = 2,
-                      assembly = NA, annotation = NA, index = NA, 
-                      rRNA, output_dir = './'
-                      ) {
+gostripes <- function(sample_sheet, cores = 2, rRNA,
+                      assembly = NA, annotation = NA, star_index = NA
+             ) {
 
 	## Check for proper inputs to gostripes function.
 
@@ -97,10 +96,9 @@ gostripes <- function(sample_sheet, cores = 2,
 		"##\n",
 		"## Available cores set to ", cores, "\n",
 		"## Assembly = ", assembly, "\n",
-		"## Index = ", index, "\n",
+		"## STAR Index = ", star_index, "\n",
 		"## Annotation = ", annotation, "\n",
 		"## rRNA = ", rRNA, "\n",
-		"## output_dir = ", output_dir, "\n",
 		"\n"
 	)
 
@@ -109,8 +107,7 @@ gostripes <- function(sample_sheet, cores = 2,
 		"gostripes",
 		sample_sheet = sample_sheet,
 		settings = list("cores" = cores, "rRNA" = rRNA, "assembly" = assembly, 
-		                "annotation" = annotation, "output_dir" = output_dir,
-		                "index" = index
+		                "annotation" = annotation, "star_index" = star_index
 		)
 	)
 
