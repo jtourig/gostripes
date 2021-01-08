@@ -123,8 +123,21 @@ fastq_quality <- function(go_obj, outdir, fastq_type = "both", cores = 1) {
 	)
 
 	## Run FastQC quality control on FASTQ files.
-	command <- paste("fastqc -t", cores, "-o", outdir, paste0(fastqs, collapse = " "))
-	system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
+	#command <- paste("fastqc -t", cores, "-o", outdir, paste0(fastqs, collapse = " "))
+	#system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
+	
+	#TODO working on improving error handling if this command fails, 
+	# e.g. in a conda env where perl binary doesn't match PERL5LIB,
+	# OR find a way to install and point to PERL5LIB within env
+	fqc_retval <- system2("fastqc", paste("-t", cores, "-o", outdir, paste0(fastqs, collapse = " ")),
+	                   stdout = FALSE, stderr = paste0(outdir, "/fastqc.err.log")
+	            )
+	if(fqc_retval != 0){
+	  message("\n******WARNING: fastQC returned nonzero exit status\n",
+	          "******check ", outdir, "fastqc.err.log for more info\n"
+	  )
+	}
+	
 	message("...Finished FastQC quality control!")
 
 	go_obj@settings$fastqc_outdir <- outdir

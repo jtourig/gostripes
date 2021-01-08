@@ -43,9 +43,13 @@ genome_index <- function(go_obj, genome_assembly, genome_annotation, outdir, cor
   
   ## Skip if the genome index is already specified in the go_obj, making sure it exists
   if(!is.na(go_obj@settings$star_index)) {
-    message("\n## Genome Indexing\n\n..go_obj specifies STAR index")
+    message("\n## Genome Indexing\n",
+            "...go_obj specifies STAR index"
+    )
     if(dir.exists(go_obj@settings$star_index)) {
-      message("......STAR index directory found\n......skipping index build...")
+      message("......STAR index directory found\n",
+              "......skipping index build\n"
+      )
       return(go_obj)
     } else stop("......STAR index specified in go_obj not found\n",
                 "......check your index option path:\n    ",
@@ -157,7 +161,7 @@ align_reads <- function(go_obj, outdir, cores = 1) {
 	## Align reads using STAR.
 	pwalk(go_obj@sample_sheet, function(...) {
 		args <- list(...)
-		message("...Processing ", args$sample)
+		message("...Processing ", args$sample_name)
 
 		# Get sequencing mode for sample.
 		seq_mode <- args$seq_mode
@@ -171,21 +175,28 @@ align_reads <- function(go_obj, outdir, cores = 1) {
 			input_reads <- file.path(go_obj@settings$fastq_outdir, paste0("decon_", args$sample_name, ".fq"))
 		}
 
-		# Align reads using STAR.
-		command <- paste(
-			"STAR",
+		#TODO load the STAR index to memory to save time with many samples and/or large genome/index
+		
+		# build STAR options
+		STAR_opts <- paste(
 			"--runThreadN", cores,
 			"--genomeDir", go_obj@settings$star_index,
 			"--readFilesIn", input_reads,
 			"--outSAMtype BAM SortedByCoordinate",
 			"--outFileNamePrefix", file.path(outdir, paste0(args$sample_name, "_"))
 		)
+		
 		message("......Aligning reads")
-		ret_val <- system(command, ignore.stdout = TRUE, ignore.stderr = TRUE)
-		message("orig STAR return value = ", ret_val)
-		system(command)
-		stop("Quitting after STAR alignment attempt")
-
+		
+		# run command and let the user know if there's an error
+		STAR_retval <- system2("STAR", STAR_opts, stdout = FALSE, stderr = paste0(outdir, "/STAR.last_err.log"))
+		if(STAR_retval != 0) {
+		  stop("\n****** STAR returned nonzero exit status\n",
+		          "****** check ", outdir, paste0("/", args$sample_name, "_", "Log.out\n"),
+		          "****** or    ", outdir, "/STAR.last_err.log for more info"
+		  )
+		}
+		
 		# Index the aligned bams.
 		message("......Indexing coordinate sorted BAMs")
 		command <- paste(
