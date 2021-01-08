@@ -48,8 +48,8 @@ devtools::load_all('./gostripes/')
 
 # init object with all attributes
 go_object <- gostripes(sample_sheet = sample_sheet, cores = 4,
-                       assembly = assembly, annotation = annotation, index = index,
-                       rRNA = rRNA, output_dir = output_dir
+                       assembly = assembly, annotation = annotation, star_index = index,
+                       rRNA = rRNA
 )
 
 # nix any existing example output before workflow
