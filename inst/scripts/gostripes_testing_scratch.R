@@ -62,7 +62,7 @@ go_object <- go_object %>%
     process_reads(paste(output_dir, "/cleaned-fastqs/", sep=''), rRNA, cores = cpus) %>%
     fastq_quality(paste(output_dir, "/fastqc-reports/", sep=''), cores = cpus) %>%
     genome_index(assembly, annotation, paste(output_dir, "/genome-index/", sep=''), cores = cpus) %>%
-    align_reads(paste(output_dir, "/aligned-bams/", sep=''), cores = cpus)# %>%
-    #process_bams(paste(output_dir, "/cleaned-bams/", sep=''), cores = cpus)
+    align_reads(paste(output_dir, "/aligned-bams/", sep=''), cores = cpus) %>%
+    process_bams(paste(output_dir, "/cleaned-bams/", sep=''), cores = cpus)
 
 message('\n    ** gostripes workflow complete **\n')
