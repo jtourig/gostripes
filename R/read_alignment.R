@@ -83,7 +83,7 @@ genome_index <- function(go_obj, genome_assembly, genome_annotation, outdir, cor
 		"## Annotation: ", genome_annotation, "\n",
 		"## Output Directory: ", outdir, "\n",
 		"## Cores: ", cores, "\n\n",
-		"...Started indexing genome\n"
+		"...Started indexing genome"
 	)
 
 	## Generate the STAR genome index.
