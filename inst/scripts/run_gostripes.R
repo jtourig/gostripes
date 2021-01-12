@@ -141,7 +141,7 @@ go_object <- go_object %>%
     align_reads(paste0(opts$output_dir, "/aligned-bams/"), cores = opts$cpus) %>%
     process_bams(paste0(opts$output_dir, "/cleaned-bams/"), cores = opts$cpus)
 
-message("\n  gostripes complete!!\n\n")
+message("\n  gostripes run complete!!\n\n")
 
 ## for reference, remaining steps which are redundant with TSRexploreR and better featured/maintained there:
 #     count_features(annotation, cores = 4) %>%
