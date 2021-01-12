@@ -24,7 +24,7 @@ print_usage <- function() {
         --cpus              integer number of cpu cores/threads to use      (optional, defaults to 2)
                             or, environment variable defining value
                             (can also set via SINGULARITYENV_[ENV_VAR_NAME]=[value or ${YOUR_VAR_NAME}] singularity [cmd] ... )
-        --output-dir       path/to/output/directory                         (optional, defaults to ./)
+        --output-dir       path/to/output/directory                         (optional, defaults to ./gostripes-output/)
         
 
         Examples:
@@ -50,7 +50,7 @@ print_usage <- function() {
 
 # parse args without added dependencies
 parse_args <- function(args){
-    opts <- list(cpus = 2, output_dir = './') # init options and set defaults
+    opts <- list(cpus = 2, output_dir = './gostripes-output/') # set defaults
     i <- 1
     while(i <= length(args)) {
         print(args[[i]])
