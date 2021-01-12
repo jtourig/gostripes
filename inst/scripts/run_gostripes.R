@@ -129,7 +129,7 @@ if(!is.null(opts$assembly) && !is.null(opts$annotation)){
 } else {
     message('missing an assembly or annotation - both are required!')
     if(!is.null(opts$star_index)) message('oops, a STAR index is also set')
-    stop("You must specify a genome assembly + annotation, OR just a STAR index", '\n\t\tExiting...')
+    stop("You must specify a genome assembly + annotation, OR just a STAR index", '\n\tExiting...')
 }
 
 # run workflow given options
