@@ -3,9 +3,10 @@ From: continuumio/miniconda3
 
 
 %help
-	gostripes v0.3.1
+	gostripes v0.4.1
 	Processing and quality control of STRIPE-seq FASTQ files
-	see https://github.com/rpolicastro/gostripes for usage details
+	See `singularity run gostripes_v0.4.1.sif --help'
+	or https://github.com/rpolicastro/gostripes for usage details
 
 
 %post
