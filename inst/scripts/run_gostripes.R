@@ -11,7 +11,9 @@ library("magrittr")
 
 print_usage <- function() {
     cat("
-        usage:  run_gostripes.R [options] 
+        usage:  singularity run [singularity opts] [gostripes opts (see below)]
+                or
+                run_gostripes.R [gostripes opts] (if within container shell)
         
         options:
         -h | --help         (prints this message)
@@ -53,7 +55,6 @@ parse_args <- function(args){
     opts <- list(cpus = 2, output_dir = './gostripes-output/') # set defaults
     i <- 1
     while(i <= length(args)) {
-        print(args[[i]])
         switch(
             args[[i]],
             '--sample-sheet' = { 
@@ -119,7 +120,7 @@ if(!is.null(opts$assembly) && !is.null(opts$annotation)){
 } else if(is.null(opts$assembly) && is.null(opts$annotation)) {
     message('  no assembly or annotation assigned, using STAR index')
     if(!is.null(opts$star_index)) {
-        message('index is assigned')
+        message('    index is assigned')
         #init gostripes object with STAR index
         go_object <- gostripes(sample_sheet = read.csv(opts$sample_sheet, header = TRUE, sep = '\t'),
                                cores = opts$cpus, rRNA = opts$rRNA,
