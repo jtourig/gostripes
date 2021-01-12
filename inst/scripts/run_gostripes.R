@@ -106,11 +106,10 @@ opts <- parse_args(args)
 
 # check the genome + assembly OR index settings, and initialize gostripes object
 if(!is.null(opts$assembly) && !is.null(opts$annotation)){
-    #TODO change print() to message() and check formatting
     message('  assembly and annotation are set')
     if(!is.null(opts$star_index)) {
         message('    oops, a STAR index is also set')
-        stop("    You must specify a genome assembly + annotation, OR just a STAR index", '\n    Exiting...')
+        stop("    You must specify a genome assembly + annotation, OR just a STAR index", '\n\tExiting...')
     }
     #init gostripes object with genome and assembly
     go_object <- gostripes(sample_sheet = read.csv(opts$sample_sheet, header = TRUE, sep = '\t'),
@@ -130,7 +129,7 @@ if(!is.null(opts$assembly) && !is.null(opts$annotation)){
 } else {
     message('missing an assembly or annotation - both are required!')
     if(!is.null(opts$star_index)) message('oops, a STAR index is also set')
-    stop("You must specify a genome assembly + annotation, OR just a STAR index", '\nExiting...')
+    stop("You must specify a genome assembly + annotation, OR just a STAR index", '\n\t\tExiting...')
 }
 
 # run workflow given options
