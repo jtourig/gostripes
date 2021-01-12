@@ -43,7 +43,6 @@ setClass(
 #' @param annotation Path to genome annotation
 #' @param rRNA Path to rRNA.fasta to filter with
 #' @param star_index Path to STAR index
-#' @param output_dir  Base path to save output to
 #'
 #' @return gostripes object containing the sample sheet and available cores
 #'
@@ -90,7 +89,7 @@ gostripes <- function(sample_sheet, cores = 2, rRNA,
 
 	## Print out some information on the sample sheet.
 	message(
-		"\n## gostripesR v0.3.1\n##\n",
+		"\n## gostripesR v0.4.1\n##\n",
 		"## Sample sheet contains ", nrow(sample_sheet), " sample(s)\n",
 		sprintf("## - %s\n", pull(sample_sheet, "sample_name")),
 		"##\n",
