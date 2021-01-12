@@ -6,7 +6,9 @@
 library("gostripes")
 library("magrittr")
 
+
 ### FUNCTIONS ###
+
 print_usage <- function() {
     cat("
         usage:  run_gostripes.R [options] 
@@ -95,6 +97,7 @@ parse_args <- function(args){
 
 
 ### MAIN ###
+
 # fetch and parse command line arguments, give user help
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) == 0 || '-h' %in% args || '--help' %in% args) print_usage()
@@ -129,23 +132,17 @@ if(!is.null(opts$assembly) && !is.null(opts$annotation)){
     stop("You must specify a genome assembly + annotation, OR just a STAR index", '\nExiting...')
 }
 
-
 # run workflow given options
-
-print(go_object)
-
 go_object <- go_object %>%
-    process_reads(paste(opts$output_dir, "/cleaned-fastqs/", sep=''), opts$rRNA, cores = opts$cpus) %>%
-    fastq_quality(paste(opts$output_dir, "/fastqc-reports/", sep=''), cores = opts$cpus) %>%
-    genome_index(opts$assembly, opts$annotation, paste(opts$output_dir, "/genome-index/", sep=''), cores = opts$cpu) %>%
-    align_reads(paste(opts$output_dir, "/aligned-bams/", sep=''), cores = opts$cpus) %>%
-    process_bams(paste(opts$output_dir, "/cleaned-bams/", sep=''), cores = opts$cpus)
-
-print(go_object)
+    process_reads(paste0(opts$output_dir, "/cleaned-fastqs/"), opts$rRNA, cores = opts$cpus) %>%
+    fastq_quality(paste0(opts$output_dir, "/fastqc-reports/"), cores = opts$cpus) %>%
+    genome_index(opts$assembly, opts$annotation, paste0(opts$output_dir, "/genome-index/"), cores = opts$cpu) %>%
+    align_reads(paste0(opts$output_dir, "/aligned-bams/"), cores = opts$cpus) %>%
+    process_bams(paste0(opts$output_dir, "/cleaned-bams/"), cores = opts$cpus)
 
 message("\n  gostripes complete!!\n\n")
 
-## steps which Bob says are redundant with TSRexploreR and better featured/maintained there
+## for reference, remaining steps which are redundant with TSRexploreR and better featured/maintained there:
 #     count_features(annotation, cores = 4) %>%
 #     export_counts("./scratch/counts") %>%
 #     call_TSSs %>%
