@@ -15,41 +15,29 @@ yeast_index='./Sc-R64-STAR-index/'
 num_procs=4
 output_dir='./gostripes-container-commands-test-output/'
 
+# clear out any existing test output
+rm -r "$output_dir" || >&2 echo '  no output dir to delete'
 
-## test bad options first
+## a good command, with index
+# singularity run -ecH "$PWD" "$gostripes_container" \
+# 	--sample-sheet "$samples" --cpus "$num_procs" \
+# 	--STAR-index "$yeast_index" \
+# 	--rRNA "$yeast_rRNA" --output-dir "$output_dir"
 
-
-singularity run -ecH "$PWD" "$gostripes_container" \
-	--sample-sheet "$samples" --cpus "$num_procs" \
-	--STAR-index "$yeast_index" \
-	--rRNA "$yeast_rRNA" --output-dir "$output_dir"
-
-
+## good command, with genome and annotation
+# singularity run -ecH "$PWD" "$gostripes_container" \
 # 	--sample-sheet "$samples" --cpus "$num_procs" \
 # 	--assembly "$yeast_assembly" --annotation "$yeast_annotation" \
 # 	--rRNA "$yeast_rRNA" --output-dir "$output_dir"
 
-exit
 
+## BAD commands:
 
-#!/bin/bash
-# some test commands to debug options parsing
-# run from dir containing the R script
-
-# # a well-formed command with genome and annotation
-# ./gostripes_parse_args.R --sample-sheet some_file.txt \
-# 	--assembly genome.fa --annotation some_annot.gtf --rRNA /opt/genome/some_contam.fa \
-# 	--cpus 6 --output-dir some/dir
-
-# # a well-formed command with STAR index
-# ./gostripes_parse_args.R --sample-sheet some_file.txt \
-# 	--STAR-index star.index --rRNA /opt/genome/some_contam.fa \
-# 	--cpus 6 --output-dir some/dir
-
-# # a bad command with genome + assembly + STAR index
-# ./gostripes_parse_args.R --sample-sheet some_file.txt \
-# 	--assembly genome.fa --annotation some_annot.gtf --rRNA /opt/genome/some_contam.fa \
-# 	--cpus 6 --output-dir some/dir  --STAR-index star.index
+# with genome + assembly + STAR index
+singularity run -ecH "$PWD" "$gostripes_container" \
+	--sample-sheet some_file.txt --cpus "$num_procs" --rRNA "$yeast_rRNA" \
+	--assembly "$yeast_assembly" --annotation "$yeast_annotation" --STAR-index "$yeast_index" \
+	--output-dir "$output_dir"
 
 # # bad command with only assembly
 # ./gostripes_parse_args.R --sample-sheet some_file.txt \
@@ -72,5 +60,7 @@ exit
 # 	--cpus 6 --output-dir some/dir --STAR-index star.index
 
 # a well-formed command with genome and annotation, without the optional options
-./gostripes_parse_args.R --sample-sheet some_file.txt \
-	--assembly genome.fa --annotation some_annot.gtf --rRNA /opt/genome/some_contam.fa
+# ./gostripes_parse_args.R --sample-sheet some_file.txt \
+# 	--assembly genome.fa --annotation some_annot.gtf --rRNA /opt/genome/some_contam.fa
+
+exit
