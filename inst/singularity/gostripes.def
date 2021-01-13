@@ -5,8 +5,10 @@ From: continuumio/miniconda3
 %help
 	gostripes v0.4.1
 	Processing and quality control of STRIPE-seq FASTQ files
-	See `singularity run gostripes_v0.4.1.sif --help'
-	or https://github.com/rpolicastro/gostripes for usage details
+
+	singularity run gostripes_v0.4.1.sif --help
+	or
+	see https://github.com/rpolicastro/gostripes for usage details
 
 
 %post
@@ -72,8 +74,8 @@ From: continuumio/miniconda3
 
 %runscript
 	# trying `gostripes.R $@' (should be in path above) here, so the container can be run as:
-	# singularity run gostripes_0.3.0.sif [gostripes.R --options]
-	echo "$NOW  Running gostripes with options:" >&2
+	# singularity run gostripes_0.4.1.sif [gostripes.R --options]
+	echo -e "\nRunning gostripes with options:" >&2
 	echo "$*" >&2
 	exec run_gostripes.R "$@"
 
@@ -83,7 +85,7 @@ From: continuumio/miniconda3
 
 
 %labels
-	version	0.3.1
+	version	0.4.1
 	Author Bob Policastro @rpolicastro
 	Contributor	Jay Tourigny @jtourig
 
