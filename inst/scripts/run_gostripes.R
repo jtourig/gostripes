@@ -18,9 +18,9 @@ print_usage <- function() {
         options:
         -h | --help         (prints this message)
         --sample-sheet      path/to/sample_sheet                            (required)
-        --assembly          path/to/genome/assembly                         (required WITH annotation file OR use --STAR-index)
-        --annotation        path/to/assembly/annotation                     (required WITH assembly OR use --STAR-index)
-        --STAR-index        path/to/STAR/index                              (required if NOT using --assembly and --annotations)
+        --assembly          path/to/genome_assembly                         (required WITH annotation file OR use --STAR-index)
+        --annotation        path/to/assembly_annotation                     (required WITH assembly OR use --STAR-index)
+        --STAR-index        path/to/STAR-index                              (required if NOT using --assembly and --annotations)
                             use a pre-built index instead of building from scratch
         --rRNA              fasta file defining your contaminants to filter (required)
         --cpus              integer number of cpu cores/threads to use      (optional, defaults to 2)
@@ -28,23 +28,28 @@ print_usage <- function() {
                             (can also set via SINGULARITYENV_[ENV_VAR_NAME]=[value or ${YOUR_VAR_NAME}] singularity [cmd] ... )
         --output-dir       path/to/output/directory                         (optional, defaults to ./gostripes-output/)
         
+        ** gostripes option paths reflect their naming as mounted INSIDE the container               **
+        ** see `singularity run --help' for more details on how to use `-B' to mount your host paths **
 
         Examples:
 
-          Running the container as a command:
+          Running the container as a host command:
+
           singularity run -ecB your/genome/dir:/opt/genome/ -H \"$PWD\" gostripes.sif \
             --sample_sheet ./your_sample_sheet.tsv --rRNA /opt/genome/Hs_rRNA.fa \
             --STAR-index /opt/genome/your-STAR-index-dir/ --cpus 4 \
             --output-dir ./gostripes-output/
         
-          From inside gostripes singularity container:
+
+          From inside gostripes singularity container shell:
+
           run_gostripes.R --sample_sheet ./your_sample_sheet.tsv --assembly /opt/genome/hg38.fa.masked  \
             --annotation /opt/genome/hg38.ncbiRefSeq.gtf --rRNA /opt/genome/Hs_rRNA.fa \
             --cpus 4 --output-dir ./gostripes-output/
 
     
         NOTE that currently, if you provide --assembly and --annotation, the STAR index build uses default options
-          If you need to customize your index build, do that first and provide it via --STAR-index
+          If you need to customize your index build, do that separately first and provide it via --STAR-index
     "
     )
     q()
