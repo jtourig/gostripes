@@ -18,49 +18,76 @@ output_dir='./gostripes-container-commands-test-output/'
 # clear out any existing test output
 rm -r "$output_dir" || >&2 echo '  no output dir to delete'
 
-## a good command, with index
+# # a good command, with index
 # singularity run -ecH "$PWD" "$gostripes_container" \
 # 	--sample-sheet "$samples" --cpus "$num_procs" \
 # 	--STAR-index "$yeast_index" \
 # 	--rRNA "$yeast_rRNA" --output-dir "$output_dir"
 
-## good command, with genome and annotation
+sleep 2
+
+# # good command, with genome and annotation
 # singularity run -ecH "$PWD" "$gostripes_container" \
 # 	--sample-sheet "$samples" --cpus "$num_procs" \
 # 	--assembly "$yeast_assembly" --annotation "$yeast_annotation" \
 # 	--rRNA "$yeast_rRNA" --output-dir "$output_dir"
 
+# # good command with genome and annotation, without the optional options
+# singularity run -ecH "$PWD" "$gostripes_container" \
+# 	--sample-sheet "$samples" \
+# 	--assembly "$yeast_assembly" --annotation "$yeast_annotation" \
+# 	--rRNA "$yeast_rRNA"
+
+sleep 2
 
 ## BAD commands:
 
-# with genome + assembly + STAR index
-singularity run -ecH "$PWD" "$gostripes_container" \
-	--sample-sheet some_file.txt --cpus "$num_procs" --rRNA "$yeast_rRNA" \
-	--assembly "$yeast_assembly" --annotation "$yeast_annotation" --STAR-index "$yeast_index" \
-	--output-dir "$output_dir"
+# set +e
+
+# # missing rRNA
+# singularity run -ecH "$PWD" "$gostripes_container" \
+# 	--sample-sheet "$samples" --cpus "$num_procs" \
+# 	--assembly "$yeast_assembly" --annotation "$yeast_annotation" \
+# 	--output-dir "$output_dir"
+
+# sleep 2
+
+# # with genome + assembly + STAR index
+# singularity run -ecH "$PWD" "$gostripes_container" \
+# 	--sample-sheet "$samples" --cpus "$num_procs" --rRNA "$yeast_rRNA" \
+# 	--assembly "$yeast_assembly" --annotation "$yeast_annotation" --STAR-index "$yeast_index" \
+# 	--output-dir "$output_dir"
+
+# sleep 2
 
 # # bad command with only assembly
-# ./gostripes_parse_args.R --sample-sheet some_file.txt \
-# 	--assembly genome.fa --rRNA /opt/genome/some_contam.fa \
-# 	--cpus 6 --output-dir some/dir
+# singularity run -ecH "$PWD" "$gostripes_container" \
+# 	--sample-sheet "$samples" --cpus "$num_procs" --rRNA "$yeast_rRNA" \
+# 	--assembly "$yeast_assembly" \
+# 	--output-dir "$output_dir"
+
+# sleep 2
 
 # # bad command with only annotation
-# ./gostripes_parse_args.R --sample-sheet some_file.txt \
-# 	--annotation some_annot.gtf --rRNA /opt/genome/some_contam.fa \
-# 	--cpus 6 --output-dir some/dir
+# singularity run -ecH "$PWD" "$gostripes_container" \
+# 	--sample-sheet "$samples" --cpus "$num_procs" --rRNA "$yeast_rRNA" \
+# 	--annotation "$yeast_annotation" \
+# 	--output-dir "$output_dir"
+
+# sleep 2
 
 # # bad command with assembly and index
-# ./gostripes_parse_args.R --sample-sheet some_file.txt \
-# 	--assembly genome.fa --rRNA /opt/genome/some_contam.fa \
-# 	--cpus 6 --output-dir some/dir --STAR-index star.index
+# singularity run -ecH "$PWD" "$gostripes_container" \
+# 	--sample-sheet "$samples" --cpus "$num_procs" --rRNA "$yeast_rRNA" \
+# 	--assembly "$yeast_assembly" --STAR-index "$yeast_index" \
+# 	--output-dir "$output_dir"
+
+# sleep 2
 
 # # bad command with annotation and index
-# ./gostripes_parse_args.R --sample-sheet some_file.txt \
-# 	--annotation some_annot.gtf --rRNA /opt/genome/some_contam.fa \
-# 	--cpus 6 --output-dir some/dir --STAR-index star.index
-
-# a well-formed command with genome and annotation, without the optional options
-# ./gostripes_parse_args.R --sample-sheet some_file.txt \
-# 	--assembly genome.fa --annotation some_annot.gtf --rRNA /opt/genome/some_contam.fa
+# singularity run -ecH "$PWD" "$gostripes_container" \
+# 	--sample-sheet "$samples" --cpus "$num_procs" --rRNA "$yeast_rRNA" \
+# 	--annotation "$yeast_annotation" --STAR-index "$yeast_index" \
+# 	--output-dir "$output_dir"
 
 exit
