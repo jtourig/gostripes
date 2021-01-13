@@ -111,10 +111,10 @@ opts <- parse_args(args)
 
 # check the genome + assembly OR index settings, and initialize gostripes object
 if(!is.null(opts$assembly) && !is.null(opts$annotation)){
-    message('  assembly and annotation are set')
+    message('...assembly and annotation are set')
     if(!is.null(opts$star_index)) {
-        message('    oops, a STAR index is also set')
-        stop("    You must specify a genome assembly + annotation, OR just a STAR index", '\n\tExiting...')
+        message('......oops, a STAR index is also set')
+        stop("You must specify a genome assembly + annotation, OR just a STAR index", '\nExiting...\n')
     }
     #init gostripes object with genome and assembly
     go_object <- gostripes(sample_sheet = read.csv(opts$sample_sheet, header = TRUE, sep = '\t'),
@@ -122,9 +122,9 @@ if(!is.null(opts$assembly) && !is.null(opts$annotation)){
                            assembly = opts$assembly, annotation = opts$annotation
     )
 } else if(is.null(opts$assembly) && is.null(opts$annotation)) {
-    message('  no assembly or annotation assigned, using STAR index')
+    message('...no assembly or annotation assigned, using STAR index')
     if(!is.null(opts$star_index)) {
-        message('    index is assigned')
+        message('......index is assigned')
         #init gostripes object with STAR index
         go_object <- gostripes(sample_sheet = read.csv(opts$sample_sheet, header = TRUE, sep = '\t'),
                                cores = opts$cpus, rRNA = opts$rRNA,
@@ -132,9 +132,9 @@ if(!is.null(opts$assembly) && !is.null(opts$annotation)){
         )
     } else stop('no assembly, annotation or index set! see gostripes.R --help for usage')
 } else {
-    message('missing an assembly or annotation - both are required!')
-    if(!is.null(opts$star_index)) message('oops, a STAR index is also set')
-    stop("You must specify a genome assembly + annotation, OR just a STAR index", '\n\tExiting...')
+    message('...missing an assembly or annotation - both are required!')
+    if(!is.null(opts$star_index)) message('......oops, a STAR index is also set')
+    stop("You must specify a genome assembly + annotation, OR just a STAR index", '\nExiting...\n')
 }
 
 # run workflow given options
