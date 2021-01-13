@@ -133,8 +133,8 @@ If the samples were sequenced in single-end mode, you can leave the entries in '
 
 **For the workflow command**, a tab-separated file such as:
 ```
-sample_name         replicate_ID        R1_read                        R2_read
-your_sample1_name   0                   container/path/to/R1.fastq	   container/path/to/R2.fastq
+sample_name         replicate_ID        R1_read                          R2_read
+your_sample1_name   0                   container/path/to/R1.fastq	 container/path/to/R2.fastq
 ...
 ```
 ...will suffice.  Recall that paths must be relative to what the container can see.
