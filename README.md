@@ -7,31 +7,31 @@ Processing and quality control of STRIPE-seq FASTQ files.
 ### Singularity Container
 
 It is recommended to use the provided singularity container with all required software installed.
-Singularity are containers similar to docker containers that allow compatibility and reproducibility for software and workflows.
+Singularity packages containers similar to docker containers that allow for compatibility and reproducibility of software and workflows.
 You must first install the [singularity software](https://sylabs.io/guides/3.5/user-guide/quick_start.html#quick-installation-steps) 
 onto your machine to use containers.
 
-Once you have singularity installed and are ready to run the workflow, download the gostripes container to access all required software.
+Once you have singularity installed and are ready to run the workflow, download the gostripes container to access all required software:
 
-Navigate to your desired directory or create a new one, then follow the instructions below.
+- Navigate to your desired directory or create a new one, then follow the instructions below
 
-Pull the singularity container from Sylabs Cloud:
+- Pull the singularity container from Sylabs Cloud:
 ```
 singularity pull library://jtourig/gostripes/gostripes_v0.4.1.sif
 ```
-... for the most recent (mostly) stable build
+... for the most recent stable build
 
 or
 
 ```
 singularity pull library://jtourig/gostripes/gostripes_v0.4.x_dev.sif
 ```
-... for the latest (probably buggy) version
+... for the latest (probably buggy) developmental version
 
 
 ## Quickstart
 
-You have a couple options to run gostripes.  The latest verstion (0.4) lets you run the whole workflow automated from the host command line.  You can also enter the container to run the workflow command, or use the container's R installation to load the gostripe library run your own R script.
+You have a couple options to run gostripes.  The latest verstion (0.4) lets you run the whole automated workflow  from the host command line.  You can also enter the container to run the workflow command, or use the container's R installation to load the gostripe library run your own R script.
 
 ### Run the whole workflow from the host as a single command
 
@@ -131,6 +131,15 @@ Each sample in a group of biological replicates should have the same replicate I
 The R1 and R2 read fields should contain the full path to the FASTQ file including the file name.
 If the samples were sequenced in single-end mode, you can leave the entries in 'R2_read' blank.
 
+**For the workflow command**, a tab-separated file such as:
+```
+sample_name	replicate_ID	R1_read R2_read
+your_sample.txt	0	container/path/to/R1.fastq	container/path/to/R2.fastq
+...
+```
+...will suffice.  Recall that paths must be relative to what the container can see.
+
+**In container R**:
 ```
 library("gostripes")
 
