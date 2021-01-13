@@ -1,4 +1,4 @@
-# gostripesR v0.3.0
+# gostripesR v0.4.1
 
 Processing and quality control of STRIPE-seq FASTQ files.
 
@@ -11,18 +11,58 @@ Singularity are containers similar to docker containers that allow compatibility
 You must first install the [singularity software](https://sylabs.io/guides/3.5/user-guide/quick_start.html#quick-installation-steps) 
 onto your machine to use containers.
 
-When you have singularity installed and are ready to run the workflow,
-you can then download the gostripes container to access all required software.
-Create a new scratch directory and navigate into it, and then follow the instructions below.
+Once you have singularity installed and are ready to run the workflow, download the gostripes container to access all required software.
+
+Navigate to your desired directory or create a new one, then follow the instructions below.
 
 Pull the singularity container from Sylabs Cloud:
 ```
-singularity pull --arch amd64 library://rpolicastro/default/gostripes:0.3.0
+singularity pull library://jtourig/gostripes/gostripes_v0.4.1.sif
 ```
+... for the most recent (mostly) stable build
+
+or
+
+```
+singularity pull library://jtourig/gostripes/gostripes_v0.4.x_dev.sif
+```
+... for the latest (probably buggy) version
+
+
+## Quickstart
+
+You have a couple options to run gostripes.  The latest verstion (0.4) lets you run the whole workflow automated from the host command line.  You can also enter the container to run the workflow command, or use the container's R installation to load the gostripe library run your own R script.
+
+### Run the whole workflow from the host as a single command
+
+**Generic command**:
+```
+singularity run -eCB your/genome/dir -H "$PWD" path/to/gostripes_v0.4.1.sif \
+	--sample-sheet path/to/samples_file.txt --cpus 4 \
+	--assembly your/genome/dir/assembly.fa --annotation your/genome/dir/annotation.gtf \
+	--rRNA your/genome/dir/rRNA_contaminants.fa --output-dir your/gostripes/output/dir
+```
+... `-B` binds host directories so you can access them from inside the container. `-H $PWD` does this to your current directory and makes it the container $HOME.  Be mindful where you give this or any other container access on your system.  See `singularity run --help` for more info on how to use these and other handy options.
+
+
+**Try it on the included example data** (assumes container is in your current working directory):
+```
+singularity run -eCH "$PWD" gostripes_v0.4.1.sif --cpus 2 \
+	--sample-sheet /opt/conda/envs/gostripes/lib/R/library/gostripes/extdata/gostripes_example_sample_sheet.txt \
+	--rRNA /opt/conda/envs/gostripes/lib/R/library/gostripes/extdata/Sc_rRNA.fasta \
+	--assembly /opt/conda/envs/gostripes/lib/R/library/gostripes/extdata/Saccharomyces_cerevisiae.R64-1-1.dna_sm.toplevel.fa \
+	--annotation /opt/conda/envs/gostripes/lib/R/library/gostripes/extdata/Saccharomyces_cerevisiae.R64-1-1.99.gtf \
+	--output-dir ./gostripes-example-output/
+```
+
+See `singularity help gostripes_v0.4.1.sif` or `singularity run gostripes_v0.4.1.sif --help` for more usage info.
+
+
+### From container R
 
 Start R within the container to gain access to the installed software:
 ```
-singularity exec -eCH "$PWD" gostripes_0.3.0.sif R
+singularity exec -eCH "$PWD" gostripes_0.4.1.sif R
 ```
 ...runs R inside a container with your current directory bound as the container's home directory.
 
@@ -36,7 +76,7 @@ See `singularity exec --help` for more info
 
 You are now ready to use gostripes!
 
-## Quickstart
+**Running the included example from R**:
 
 ```
 library("gostripes")
@@ -86,10 +126,10 @@ gostripes takes demultiplexed STRIPE-seq FASTQ files as input, in either paired-
 For paired-end data it is important that the forward and reverse reads are in the same order in both files.
 
 gostripes is also able to handle multiple samples at the same time using a sample sheet.
-The sample sheet should have 4 columns: sample_name, replicate_ID, R1_read, R2_read.  This header row must be included.
+The sample sheet should have 4 labeled columns: `sample_name`, `replicate_ID`, `R1_read`, `R2_read`.  This header row must be included.
 Each sample in a group of biological replicates should have the same replicate ID.
-The R1 and R2 reads should include the path to the file as well as the file name.
-If the samples were sequenced in single-end mode, you can leave the entries in R2_read blank.
+The R1 and R2 read fields should contain the full path to the FASTQ file including the file name.
+If the samples were sequenced in single-end mode, you can leave the entries in 'R2_read' blank.
 
 ```
 library("gostripes")
@@ -151,6 +191,9 @@ Second, any TSS that has more than 3 soft-clipped bases adjacent to it is remove
 ```
 go_object <- process_bams(go_object, "./scratch/cleaned_bams", cores = 4)
 ```
+
+## NOTE: The functions below are now better implemented/maintained in the [TSRexploreR](https://github.com/zentnerlab/TSRexploreR) package and are not included in the automated workflow command above
+
 ### Feature Counting
 
 After the quality contol steps, the resulting BAMs can be used for RNA-seq like feature counting.
