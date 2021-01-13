@@ -68,7 +68,7 @@ singularity exec -eCH "$PWD" gostripes_0.4.1.sif R
 
 You can also give the container access to other directories on the host machine:
 ```
-singularity exec -eCB your/genome/dir/etc:/opt/genome/  -H "$PWD" gostripes_0.3.0.sif R
+singularity exec -eCB your/genome/dir/etc:/opt/genome/  -H "$PWD" gostripes_0.4.1.sif R
 ```
 ...binds the container's /opt/genome/ path to a host directory possibly containing genome files
 
