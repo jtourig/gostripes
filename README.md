@@ -1,6 +1,8 @@
-# gostripesR v0.4.1
+# gostripesR v0.4.1 (JT fork)
 
-Processing and quality control of STRIPE-seq FASTQ files.
+#### Processing and quality control of STRIPE-seq FASTQ files
+
+by Bob Policastro @rpolicastro, with contributions from JT @jtourig
 
 ## Preparing Required Software
 
@@ -17,16 +19,16 @@ Once you have singularity installed and are ready to run the workflow, download 
 
 - Pull the singularity container from Sylabs Cloud:
 ```
-singularity pull library://jtourig/gostripes/gostripes_v0.4.1.sif
+singularity pull library://jtourig/gostripes/gostripes:v0.4.1
 ```
 ... for the most recent stable build
 
 or
 
 ```
-singularity pull library://jtourig/gostripes/gostripes_v0.4.x_dev.sif
+singularity pull library://jtourig/gostripes/gostripes_v0.4.x.sif
 ```
-... for the latest (probably buggy) developmental version
+... for the latest (probably buggy) developmental version (this link may not always work)
 
 
 ## Quickstart
@@ -42,7 +44,7 @@ singularity run -eCB your/genome/dir -H "$PWD" path/to/gostripes_v0.4.1.sif \
 	--assembly your/genome/dir/assembly.fa --annotation your/genome/dir/annotation.gtf \
 	--rRNA your/genome/dir/rRNA_contaminants.fa --output-dir your/gostripes/output/dir
 ```
-... `-B` binds host directories so you can access them from inside the container. `-H $PWD` does this to your current directory and makes it the container $HOME.  Be mindful where you give this or any other container access on your system.  See `singularity run --help` for more info on how to use these and other handy options.
+... `-B` binds host directories so you can access them from inside the container. `-H "$PWD"` does this to your current directory and makes it the container $HOME.  Be mindful where you give this or any other container access on your system.  See `singularity run --help` for more info on how to use these and other handy options.
 
 
 **Try it on the included example data** (assumes container is in your current working directory):
