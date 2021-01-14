@@ -33,7 +33,7 @@ singularity pull library://jtourig/gostripes/gostripes_v0.4.x.sif
 
 ## Quickstart
 
-You have a couple options to run gostripes.  The latest verstion (0.4) lets you run the whole automated workflow  from the host command line.  You can also enter the container to run the workflow command, or use the container's R installation to load the gostripe library run your own R script.
+You have a couple options to run gostripes.  The latest verstion (0.4) lets you run the whole automated workflow  from the host command line.  You can also enter the container to run the workflow command, or use the container's R installation to load the gostripe library and run your own R script.
 
 ### Run the whole workflow from the host as a single command
 
